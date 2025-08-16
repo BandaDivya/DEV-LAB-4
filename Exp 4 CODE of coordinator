@@ -1,0 +1,156 @@
+import pandas as pd               # pandas is used for handling and cleaning tabular data
+import matplotlib.pyplot as plt   # matplotlib is used for creating charts/plots
+
+# Step 1: Load the CSV file
+df = pd.read_csv(r"C:\Users\91984\Downloads\ChildLabourinIndia.csv")   # read the CSV file into a DataFrame called df
+print("\n--- Step 1: Original Data Loaded ---")
+print(df.head(), "\n")   # .head() shows first 5 rows of data
+
+
+# Step 2: Simplify category names
+# 'Category of States' column has long names like:
+# "Non Special Category states" and "Special Category States"
+# These are replaced with shorter, simpler names for easy use
+df['Category'] = df['Category of States'].replace(
+    ['Non Special Category states', 'Special Category States'],   # what to find
+    ['Non Special', 'Special']                                    # what to replace with
+)
+print("\n--- Step 2: After Replacing Category Names ---")
+print(df[['Category of States', 'Category']].head(), "\n")   # show old vs new categories
+
+# Step 3: Filter Special category states
+# Here we pick only the rows where Category is "Special"
+special_states = df[df['Category'] == 'Special']
+print("\n--- Step 3: Special Category States ---")
+print(special_states, "\n")
+
+# Step 4: Filter Non-Special category states
+# Pick only "Non Special" rows
+non_special_states = df[df['Category'] == 'Non Special']
+print("\n--- Step 4: Non-Special Category States Count ---")
+print("Count:", len(non_special_states), "\n")   # count how many rows
+
+
+# Step 5: Count states by category
+special = len(special_states)                      # number of Special states
+non_special = len(non_special_states)              # number of Non Special states
+all_india = len(df[df['Category'] == 'All India']) # count if row has All India total
+print("\n--- Step 5: Counts for each Category ---")
+print(f"Special: {special}, Non-Special: {non_special}, All India: {all_india}\n")
+
+
+# Step 6: Pie Chart
+# Pie chart is created to show proportion of states
+sizes = [special, non_special, all_india]      # values for each category
+labels = ['Special', 'Non Special', 'All India']  # labels for chart
+colors = ['skyblue', 'yellowgreen', 'red']     # colors used in chart
+explode = (0.2, 0, 0.3)                        # separate slices outward
+
+plt.pie(sizes, labels=labels, colors=colors,
+        explode=explode, autopct='%1.1f%%', shadow=True)  # autopct shows % value
+plt.title('Percentage of Special, Non-Special, and All India States') # chart title
+plt.show()   # display the chart
+
+
+# Step 7: Clean Manufacturing column
+# Problem: In Manufacturing column, some values are written wrongly as "9. 9" instead of "9.9"
+print("\n--- Step 7: Manufacturing Column Before Cleaning ---")
+print(df['Manufacturing'].head(15), "\n")   # show first 15 rows
+
+# Fix the error by replacing "9. 9" → "9.9"
+df['Manufacturing'] = df['Manufacturing'].replace('9. 9', '9.9')
+# Convert the column from string to numeric (float)
+df['Manufacturing'] = df['Manufacturing'].astype(float)
+
+print("\n--- Step 7: Manufacturing Column After Cleaning ---")
+print(df['Manufacturing'].head(15), "\n")
+
+# Step 8: Stacked Bar Chart
+print("\n--- Step 8: Plotting Stacked Bar Chart ---\n")
+
+# Create a figure and axis for the chart
+fig, ax = plt.subplots(figsize=(17, 8))
+
+# Plot multiple bars on top of each other (stacked)
+ax.bar(df['States'], df['Agriculture'], color='#70C1B3', label='Agriculture')
+ax.bar(df['States'], df['Manufacturing'], 
+       bottom=df['Agriculture'], color='#247BA0', label='Manufacturing')
+ax.bar(df['States'], df['Construction'], 
+       bottom=df['Agriculture']+df['Manufacturing'], color='#FFE066', label='Construction')
+ax.bar(df['States'], df['Trade Hotels & Restaurants'], 
+       bottom=df['Agriculture']+df['Manufacturing']+df['Construction'],
+       color='#F25F5C', label='Trade Hotels & Restaurants')
+ax.bar(df['States'], df['Community, Social and Personal Services'], 
+       bottom=df['Agriculture']+df['Manufacturing']+df['Construction']+df['Trade Hotels & Restaurants'],
+       color='#50514F', label='Community, Social and Personal Services')
+ax.bar(df['States'], df['Others'], 
+       bottom=df['Agriculture']+df['Manufacturing']+df['Construction']+df['Trade Hotels & Restaurants']+df['Community, Social and Personal Services'],
+       color='#A1CF6B', label='Others')
+
+# Add legend (with multiple columns so it looks neat)
+plt.legend(bbox_to_anchor=(0, 1, 1., .102), loc=1, ncol=3, mode="expand", borderaxespad=0.5)
+# Rotate x-axis labels so state names don’t overlap
+plt.xticks(rotation=90)
+# Set y-axis range (0 to 110 for % values)
+plt.ylim((0, 110))
+# Add chart title
+plt.title("Child Labour Distribution across States by Sector")
+plt.show()
+
+
+
+
+
+
+
+
+OUTPUT
+
+STEP 1: Loading dataset...
+Data loaded successfully!
+Available columns: ['Country', 'corruption_score', 'child_labour_percent', 'population_million', 'literacy_rate']
+
+First 5 rows of data:
+      Country  corruption_score  child_labour_percent  population_million  \
+0       India                40                    12                1400   
+1       Nepal                33                    15                  30   
+2  Bangladesh                26                    18                 165   
+3   Sri Lanka                36                     8                  22   
+4    Pakistan                28                    20                 240   
+
+   literacy_rate  
+0             74  
+1             67  
+2             74  
+3             92  
+4             62  
+
+STEP 2: Selecting columns for plotting...
+Using X-axis: corruption_score
+Using Y-axis: child_labour_percent
+
+STEP 3: Checking missing values...
+Missing values in selected columns:
+corruption_score        0
+child_labour_percent    0
+dtype: int64
+Data after removing rows with missing values:
+   corruption_score  child_labour_percent
+0                40                    12
+1                33                    15
+2                26                    18
+3                36                     8
+4                28                    20
+
+STEP 4: Drawing scatter plot...
+
+STEP 5: Adding trend line...
+
+STEP 6: Displaying chart...
+
+
+
+
+
+
+ Chart created successfully!
