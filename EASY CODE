@@ -1,0 +1,117 @@
+LAB : Draw the chart between perceived corruption scores compared to the child labour percentages using matplotlib.
+
+EASY CODE:
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# STEP 1: Load the dataset
+print("\nSTEP 1: Loading dataset...")
+df = pd.read_csv(r"C:\Users\91984\Downloads\sample_child_labour_data.csv")
+print("Data loaded successfully!")
+print("Available columns:", df.columns.tolist())
+print("\nFirst 5 rows of data:")
+print(df.head())
+
+# STEP 2: Select columns for plotting
+print("\nSTEP 2: Selecting columns for plotting...")
+x_col = "corruption_score"      # replace with actual column name in your file
+y_col = "child_labour_percent"  # replace with actual column name in your file
+
+if x_col not in df.columns or y_col not in df.columns:
+    print(f" ERROR: Columns '{x_col}' and/or '{y_col}' not found. Please check your Excel file headers.")
+else:
+    print(f"Using X-axis: {x_col}")
+    print(f"Using Y-axis: {y_col}")
+
+    # STEP 3: Check for missing values
+    print("\nSTEP 3: Checking missing values...")
+    print("Missing values in selected columns:")
+    print(df[[x_col, y_col]].isnull().sum())
+
+    # Drop rows with missing values
+    df = df.dropna(subset=[x_col, y_col])
+    print("Data after removing rows with missing values:")
+    print(df[[x_col, y_col]].head())
+
+    # STEP 4: Plot scatter chart
+    print("\nSTEP 4: Drawing scatter plot...")
+    plt.figure(figsize=(8,6))
+    plt.scatter(df[x_col], df[y_col], color='blue', alpha=0.6, label="Data points")
+
+    # Add labels and title
+    plt.title("Perceived Corruption vs Child Labour")
+    plt.xlabel("Perceived Corruption Score (higher = less corrupt)")
+    plt.ylabel("Child Labour Percentage")
+
+    # STEP 5: Add trend line
+    print("\nSTEP 5: Adding trend line...")
+    m, b = np.polyfit(df[x_col], df[y_col], 1)
+    plt.plot(df[x_col], m*df[x_col] + b, color='red', label="Trend line")
+
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.7)
+
+    # STEP 6: Show chart
+    print("\nSTEP 6: Displaying chart...")
+    plt.show()
+
+    print("\n Chart created successfully!")
+
+
+
+
+
+
+
+
+
+
+
+
+OUTPUT:-
+
+STEP 1: Loading dataset...
+Data loaded successfully!
+Available columns: ['Country', 'corruption_score', 'child_labour_percent', 'population_million', 'literacy_rate']
+
+First 5 rows of data:
+      Country  corruption_score  child_labour_percent  population_million  \
+0       India                40                    12                1400   
+1       Nepal                33                    15                  30   
+2  Bangladesh                26                    18                 165   
+3   Sri Lanka                36                     8                  22   
+4    Pakistan                28                    20                 240   
+
+   literacy_rate  
+0             74  
+1             67  
+2             74  
+3             92  
+4             62  
+
+STEP 2: Selecting columns for plotting...
+Using X-axis: corruption_score
+Using Y-axis: child_labour_percent
+
+STEP 3: Checking missing values...
+Missing values in selected columns:
+corruption_score        0
+child_labour_percent    0
+dtype: int64
+Data after removing rows with missing values:
+   corruption_score  child_labour_percent
+0                40                    12
+1                33                    15
+2                26                    18
+3                36                     8
+4                28                    20
+
+STEP 4: Drawing scatter plot...
+
+STEP 5: Adding trend line...
+
+STEP 6: Displaying chart...
