@@ -3,7 +3,6 @@ LAB : Draw the chart between perceived corruption scores compared to the child l
 EASY CODE:
 
 
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,39 +26,39 @@ else:
     print(f"Using X-axis: {x_col}")
     print(f"Using Y-axis: {y_col}")
 
-# STEP 3: Check for missing values
-print("\nSTEP 3: Checking missing values...")
-print("Missing values in selected columns:")
-print(df[[x_col, y_col]].isnull().sum())
+    # STEP 3: Check for missing values
+    print("\nSTEP 3: Checking missing values...")
+    print("Missing values in selected columns:")
+    print(df[[x_col, y_col]].isnull().sum())
 
-# Drop rows with missing values
-df = df.dropna(subset=[x_col, y_col])
-print("Data after removing rows with missing values:")
-print(df[[x_col, y_col]].head())
+    # Drop rows with missing values
+    df = df.dropna(subset=[x_col, y_col])
+    print("Data after removing rows with missing values:")
+    print(df[[x_col, y_col]].head())
 
-# STEP 4: Plot scatter chart
-print("\nSTEP 4: Drawing scatter plot...")
-plt.figure(figsize=(8,6))
-plt.scatter(df[x_col], df[y_col], color='blue', alpha=0.6, label="Data points")
+    # STEP 4: Plot scatter chart
+    print("\nSTEP 4: Drawing scatter plot...")
+    plt.figure(figsize=(8,6))
+    plt.scatter(df[x_col], df[y_col], color='blue', alpha=0.6, label="Data points")
 
-# Add labels and title
-plt.title("Perceived Corruption vs Child Labour")
-plt.xlabel("Perceived Corruption Score (higher = less corrupt)")
-plt.ylabel("Child Labour Percentage")
+    # Add labels and title
+    plt.title("Perceived Corruption vs Child Labour")
+    plt.xlabel("Perceived Corruption Score (higher = less corrupt)")
+    plt.ylabel("Child Labour Percentage")
 
-# STEP 5: Add trend line
-print("\nSTEP 5: Adding trend line...")
-m, b = np.polyfit(df[x_col], df[y_col], 1)
-plt.plot(df[x_col], m*df[x_col] + b, color='red', label="Trend line")
+    # STEP 5: Add trend line
+    print("\nSTEP 5: Adding trend line...")
+    m, b = np.polyfit(df[x_col], df[y_col], 1)
+    plt.plot(df[x_col], m*df[x_col] + b, color='red', label="Trend line")
 
-plt.legend()
-plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.7)
 
-# STEP 6: Show chart
-print("\nSTEP 6: Displaying chart...")
-plt.show()
+    # STEP 6: Show chart
+    print("\nSTEP 6: Displaying chart...")
+    plt.show()
 
-print("\n Chart created successfully!")
+    print("\n Chart created successfully!")
 
 
 
